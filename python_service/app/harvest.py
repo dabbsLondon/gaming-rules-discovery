@@ -5,13 +5,17 @@ from pathlib import Path
 from typing import List
 import hashlib
 
+from . import ocr_service
+
 
 @dataclass(frozen=True)
 class HarvestedImage:
-    """Metadata about a harvested image."""
+    """Metadata about a harvested image and its extracted text."""
 
     path: str
     digest: str
+    text: str
+    is_legion_rule: bool
 
 
 def run(directory: str) -> List[HarvestedImage]:
@@ -31,8 +35,10 @@ def run(directory: str) -> List[HarvestedImage]:
         digest = hashlib.md5(p.read_bytes()).hexdigest()
         if digest in seen_hashes:
             continue
+        text = ocr_service.extract_text(str(p))
+        is_legion_rule = "legion" in text.lower()
         seen_hashes.add(digest)
-        unique_files.append(HarvestedImage(str(p), digest))
+        unique_files.append(HarvestedImage(str(p), digest, text, is_legion_rule))
     return unique_files
 
 
