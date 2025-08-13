@@ -46,3 +46,17 @@ def test_run_deduplicates_images(tmp_path, monkeypatch):
     for path, img in img_map.items():
         if path != str(img3):
             assert img.is_legion_rule is False
+
+
+def test_run_skips_non_image_files(tmp_path, monkeypatch):
+    txt = tmp_path / "note.txt"
+    txt.write_text("not an image")
+
+    def fake_ocr(_):
+        raise AssertionError("OCR should not run on non-images")
+
+    monkeypatch.setattr(harvest.ocr_service, "extract_text", fake_ocr)
+
+    imgs = harvest.run(tmp_path)
+
+    assert imgs == []
