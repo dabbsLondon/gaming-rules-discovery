@@ -12,8 +12,7 @@ rules of Horus Heresy 3.0 from user supplied images.
 - [Rust](https://www.rust-lang.org/tools/install) and `cargo`
 - Python 3.11 or newer
 - `pip` for managing Python dependencies
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/)
+- [Docker](https://docs.docker.com/get-docker/) with the Compose plugin (`docker compose`)
 - `make`
 
 ## Setup

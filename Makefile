@@ -2,10 +2,10 @@
 .PHONY: up down test harvest build
 
 up:
-> docker-compose up -d
+> docker compose up -d
 
 down:
-> docker-compose down
+> docker compose down
 
 harvest:
 > python python_service/app/harvest.py $(DIR)
@@ -15,4 +15,4 @@ test:
 > pytest python_service/tests
 
 build:
-> docker-compose build
+> docker compose build
