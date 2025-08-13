@@ -1,13 +1,39 @@
 """Batch harvesting CLI."""
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import List
+import hashlib
 
 
-def run(directory: str) -> List[str]:
-    """Return a list of image files in the given directory."""
+@dataclass(frozen=True)
+class HarvestedImage:
+    """Metadata about a harvested image."""
+
+    path: str
+    digest: str
+
+
+def run(directory: str) -> List[HarvestedImage]:
+    """Return metadata for unique images in the given directory.
+
+    Duplicate images are identified via an MD5 hash of their contents and are
+    ignored so the same rules are not processed multiple times. The digest is
+    returned alongside the file path so callers can track already ingested
+    rules.
+    """
     path = Path(directory)
-    return [str(p) for p in path.glob("*") if p.is_file()]
+    seen_hashes = set()
+    unique_files: List[HarvestedImage] = []
+    for p in path.glob("*"):
+        if not p.is_file():
+            continue
+        digest = hashlib.md5(p.read_bytes()).hexdigest()
+        if digest in seen_hashes:
+            continue
+        seen_hashes.add(digest)
+        unique_files.append(HarvestedImage(str(p), digest))
+    return unique_files
 
 
 if __name__ == "__main__":
