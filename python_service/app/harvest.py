@@ -29,8 +29,9 @@ def run(directory: str) -> List[HarvestedImage]:
     path = Path(directory)
     seen_hashes = set()
     unique_files: List[HarvestedImage] = []
+    supported_exts = {".jpg", ".jpeg", ".png"}
     for p in path.glob("*"):
-        if not p.is_file():
+        if not p.is_file() or p.suffix.lower() not in supported_exts:
             continue
         digest = hashlib.md5(p.read_bytes()).hexdigest()
         if digest in seen_hashes:
