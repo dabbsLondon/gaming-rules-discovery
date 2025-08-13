@@ -31,6 +31,13 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Sample Data
+
+Place Heresy 3.0 sample images under `sample_data/images/`. This directory
+will be used by a future AI-powered batch process that extracts and validates
+rules data from the images. Only user-supplied HH3.0 images should be stored
+here.
+
 ## Testing
 
 Run the test suites for both languages:
