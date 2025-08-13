@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  postgres:
+    build: ./postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+  rust_service:
+    build: ./rust_service
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres/postgres
+    ports:
+      - "8001:8001"
+  python_service:
+    build: ./python_service
+    depends_on:
+      - rust_service
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres/postgres
+    ports:
+      - "8000:8000"
