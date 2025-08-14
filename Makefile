@@ -14,4 +14,4 @@ test:
 	pytest python_service/tests
 
 build:
-	docker compose build
+	docker compose build --progress=plain
